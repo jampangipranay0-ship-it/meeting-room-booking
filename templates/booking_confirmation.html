@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="card shadow-sm rounded-4 border-success">
+      <div class="card-body">
+        <h3 class="fw-bold text-success">Booking Summary</h3>
+        <p class="text-muted">Your meeting room request has been prepared successfully.</p>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><strong>Room:</strong> {{ booking.room_name }}</li>
+          <li class="list-group-item"><strong>Date:</strong> {{ booking.date }}</li>
+          <li class="list-group-item"><strong>Time:</strong> {{ booking.start_time }} - {{ booking.end_time }}</li>
+          <li class="list-group-item"><strong>Client / Candidate:</strong> {{ booking.client_name or 'N/A' }}</li>
+          <li class="list-group-item"><strong>Purpose:</strong> {{ booking.purpose }}</li>
+          <li class="list-group-item"><strong>Reason:</strong> {{ booking.reason or 'N/A' }}</li>
+          <li class="list-group-item"><strong>Status:</strong> {{ booking.status }}</li>
+        </ul>
+        <div class="mt-3">
+          {% if session.get('user') and session['user'].get('role') == 'admin' %}
+            <a class="btn btn-primary" href="{{ url_for('admin.dashboard') }}">Go to Dashboard</a>
+          {% else %}
+            <a class="btn btn-primary" href="{{ url_for('employee.dashboard') }}">Go to Dashboard</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

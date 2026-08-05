@@ -1,0 +1,22 @@
+[
+  {
+    "id": "admin-1",
+    "name": "Admin User",
+    "email": "admin@multirecruit.com",
+    "password": "Admin@123",
+    "role": "admin",
+    "department": "HR",
+    "is_active": true,
+    "is_blocked": false
+  },
+  {
+    "id": "emp-1",
+    "name": "Employee User",
+    "email": "employee@multirecruit.com",
+    "password": "employee123",
+    "role": "employee",
+    "department": "Recruitment",
+    "is_active": true,
+    "is_blocked": false
+  }
+]

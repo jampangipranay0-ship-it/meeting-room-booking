@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="py-4 position-relative overflow-hidden hero-section">
+  <div class="container position-relative" style="z-index: 1;">
+    <div class="hero-head">
+      <div class="hero-copy">
+        <h1 class="display-5 fw-bold mb-3">Meeting Room Booking</h1>
+        <p class="text-muted mb-0">Book interview rooms, client meeting cabins, HR rooms and discussion spaces.</p>
+      </div>
+      <div class="hero-animation-container">
+        <div id="heroAnimation" class="hero-animation" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="fw-bold">Available Rooms</h3>
+    <span class="badge bg-success">Dynamic rooms</span>
+  </div>
+  <div class="row g-4">
+    {% for room in rooms %}
+    <div class="col-md-4">
+      <div class="card shadow-sm rounded-4 h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold">{{ room.name }}</h5>
+            <span class="badge bg-primary">{{ room.location }}</span>
+          </div>
+          <p class="text-muted mb-3">Capacity: {{ room.capacity }} · {{ room.equipment }}</p>
+          <a class="btn btn-outline-primary btn-sm" href="{{ url_for('main.book') }}">View Slots</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="fw-bold">Upcoming Bookings</h3>
+    <span class="text-muted">Auto-refresh every 30 seconds</span>
+  </div>
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th>Room</th><th>Date</th><th>Start</th><th>End</th><th>Booked By</th>{% if session.get('user') and session['user'].get('role') == 'admin' %}<th>Client/Candidate</th><th>Purpose</th>{% endif %}<th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for booking in bookings %}
+        <tr>
+          <td>{{ booking.room_name }}</td>
+          <td>{{ booking.date }}</td>
+          <td>{{ booking.start_time }}</td>
+          <td>{{ booking.end_time }}</td>
+          <td>{{ booking.booked_by }}</td>
+          {% if session.get('user') and session['user'].get('role') == 'admin' %}
+          <td>{{ booking.client_name or '—' }}</td>
+          <td>{{ booking.purpose }}</td>
+          {% endif %}
+          <td><span class="badge bg-info">{{ booking.status }}</span></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="{{ 8 if session.get('user') and session['user'].get('role') == 'admin' else 6 }}" class="text-muted text-center">No bookings yet</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

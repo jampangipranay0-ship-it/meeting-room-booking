@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm rounded-4">
+      <div class="card-body">
+        <h3 class="fw-bold mb-4">Edit Booking</h3>
+        <form method="post">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Room</label>
+              <select class="form-select" name="room_id" required>
+                {% for room in rooms %}
+                <option value="{{ room.id }}" {% if room.id == booking.room_id %}selected{% endif %}>{{ room.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Date</label>
+              <input class="form-control" type="date" name="date" value="{{ booking.date }}" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Start Time</label>
+              <input class="form-control" type="time" name="start_time" value="{{ booking.start_time }}" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">End Time</label>
+              <input class="form-control" type="time" name="end_time" value="{{ booking.end_time }}" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Booked By</label>
+              <input class="form-control" type="text" name="booked_by" value="{{ booking.booked_by }}" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Employee ID</label>
+              <input class="form-control" type="text" name="employee_id" value="{{ booking.employee_id }}" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Purpose</label>
+              <select class="form-select" name="purpose" required>
+                {% for option in ['Client Meeting','Candidate Interview','Internal Discussion','Training','HR Discussion','One-on-One','Project Meeting','Sales Call','Video Conference','Interview Panel','Online Meeting','Other'] %}
+                <option value="{{ option }}" {% if option == booking.purpose %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Meeting Link</label>
+              <input class="form-control" type="url" name="meeting_link" value="{{ booking.meeting_link }}">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Reason</label>
+              <textarea class="form-control" name="reason" rows="4" minlength="20" maxlength="500" required>{{ booking.reason }}</textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Client / Candidate Name</label>
+              <input class="form-control" type="text" name="client_name" value="{{ booking.client_name }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Status</label>
+              <select class="form-select" name="status" required>
+                {% for option in ['Booked','Pending Approval','Rejected','Cancelled'] %}
+                <option value="{{ option }}" {% if option == booking.status %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="mt-4">
+            <button class="btn btn-primary">Save Changes</button>
+            <a class="btn btn-secondary ms-2" href="{{ url_for('admin.dashboard') }}">Back to Dashboard</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

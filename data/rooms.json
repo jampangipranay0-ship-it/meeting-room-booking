@@ -1,0 +1,8 @@
+[
+  {"id": "room-1", "name": "War Room - BSV", "location": "BSV", "capacity": 12, "equipment": "Video Conferencing", "is_active": true},
+  {"id": "room-2", "name": "Warriors - BSV", "location": "BSV", "capacity": 8, "equipment": "Whiteboard", "is_active": true},
+  {"id": "room-3", "name": "Powerpit - BSV", "location": "BSV", "capacity": 10, "equipment": "Screen", "is_active": true},
+  {"id": "room-4", "name": "Situation - BTM", "location": "BTM", "capacity": 6, "equipment": "Phone", "is_active": true},
+  {"id": "room-5", "name": "Armory - BTM", "location": "BTM", "capacity": 14, "equipment": "Projector", "is_active": true},
+  {"id": "room-6", "name": "Boss - BTM", "location": "BTM", "capacity": 4, "equipment": "TV", "is_active": true}
+]

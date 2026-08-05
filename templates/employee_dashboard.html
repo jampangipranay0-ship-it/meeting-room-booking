@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-4">
+    <div class="card shadow-sm rounded-4 border-0 bg-primary text-white">
+      <div class="card-body">
+        <h5 class="fw-bold">Welcome, {{ user.name }}</h5>
+        <p class="mb-0">Employee dashboard for your bookings and requests</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="card shadow-sm rounded-4"><div class="card-body"><h6>Upcoming Meetings</h6><h3 class="fw-bold">{{ upcoming|length }}</h3></div></div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm rounded-4"><div class="card-body"><h6>Today's Meetings</h6><h3 class="fw-bold">{{ bookings|length }}</h3></div></div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm rounded-4"><div class="card-body"><h6>Pending Requests</h6><h3 class="fw-bold">0</h3></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4">
+  <h3 class="fw-bold">My Bookings</h3>
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead><tr><th>Room</th><th>Date</th><th>Time</th><th>Client/Candidate</th><th>Purpose</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for item in bookings %}
+        <tr>
+          <td>{{ item.room_name }}</td>
+          <td>{{ item.date }}</td>
+          <td>{{ item.start_time }} - {{ item.end_time }}</td>
+          <td>{{ item.client_name or '—' }}</td>
+          <td>{{ item.purpose }}</td>
+          <td><span class="badge bg-info">{{ item.status }}</span></td>
+          <td>
+            <form method="post" action="{{ url_for('employee.cancel_booking', booking_id=item.id) }}" style="display:inline;">
+              <button class="btn btn-danger btn-sm">Cancel</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-muted text-center">No bookings found</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
