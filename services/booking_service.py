@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import traceback
 from typing import Dict, List, Optional
 
 from models.booking import Booking
@@ -21,7 +22,12 @@ class BookingService:
         if database_url:
             print("DATABASE_URL length:", len(database_url))
             print("DATABASE_URL prefix:", database_url[:15])
-            self.booking_repo = BookingRepository(PostgresRepository(database_url))
+            try:
+                self.booking_repo = BookingRepository(PostgresRepository(database_url))
+            except Exception:
+                print("PostgreSQL init failed; falling back to local SQLite storage")
+                traceback.print_exc()
+                self.booking_repo = BookingRepository(SQLiteRepository(Config.BOOKING_DB_PATH))
         else:
             print("DATABASE_URL missing; using local SQLite booking storage")
             self.booking_repo = BookingRepository(SQLiteRepository(Config.BOOKING_DB_PATH))
