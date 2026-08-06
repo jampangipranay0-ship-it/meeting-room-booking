@@ -1,11 +1,9 @@
 from datetime import datetime
-from typing import Dict, List, Optional
-
-from repositories.sqlite_repository import SQLiteRepository
+from typing import Any, Dict, List, Optional
 
 
 class BookingRepository:
-    def __init__(self, repository: SQLiteRepository):
+    def __init__(self, repository: Any):
         self.repository = repository
         self.repository.initialize_table()
 
@@ -17,7 +15,7 @@ class BookingRepository:
                 employee_id, purpose, reason, client_name, status, duration_hours,
                 meeting_link, approved_by, remarks, created_at, modified_at,
                 extension_requested, extension_status
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 booking["id"],
@@ -38,7 +36,7 @@ class BookingRepository:
                 booking.get("remarks", ""),
                 booking["created_at"],
                 booking["modified_at"],
-                int(booking.get("extension_requested", False)),
+                booking.get("extension_requested", False),
                 booking.get("extension_status", "None"),
             ),
             commit=True,
@@ -48,18 +46,18 @@ class BookingRepository:
         return self.repository.fetch_all("SELECT * FROM bookings ORDER BY date, start_time")
 
     def get_by_id(self, booking_id: str) -> Optional[Dict]:
-        return self.repository.fetch_one("SELECT * FROM bookings WHERE id = ?", (booking_id,))
+        return self.repository.fetch_one("SELECT * FROM bookings WHERE id = %s", (booking_id,))
 
     def update(self, booking_id: str, updated: Dict) -> None:
         self.repository.execute(
             """
             UPDATE bookings SET
-                room_id = ?, room_name = ?, date = ?, start_time = ?, end_time = ?,
-                booked_by = ?, employee_id = ?, purpose = ?, reason = ?,
-                client_name = ?, status = ?, duration_hours = ?, meeting_link = ?,
-                approved_by = ?, remarks = ?, modified_at = ?,
-                extension_requested = ?, extension_status = ?
-            WHERE id = ?
+                room_id = %s, room_name = %s, date = %s, start_time = %s, end_time = %s,
+                booked_by = %s, employee_id = %s, purpose = %s, reason = %s,
+                client_name = %s, status = %s, duration_hours = %s, meeting_link = %s,
+                approved_by = %s, remarks = %s, modified_at = %s,
+                extension_requested = %s, extension_status = %s
+            WHERE id = %s
             """,
             (
                 updated["room_id"],
@@ -78,7 +76,7 @@ class BookingRepository:
                 updated.get("approved_by", ""),
                 updated.get("remarks", ""),
                 updated["modified_at"],
-                int(updated.get("extension_requested", False)),
+                updated.get("extension_requested", False),
                 updated.get("extension_status", "None"),
                 booking_id,
             ),
@@ -86,12 +84,12 @@ class BookingRepository:
         )
 
     def delete(self, booking_id: str) -> None:
-        self.repository.execute("DELETE FROM bookings WHERE id = ?", (booking_id,), commit=True)
+        self.repository.execute("DELETE FROM bookings WHERE id = %s", (booking_id,), commit=True)
 
     def get_today(self) -> List[Dict]:
         today = datetime.now().strftime("%Y-%m-%d")
         return self.repository.fetch_all(
-            "SELECT * FROM bookings WHERE date = ? ORDER BY start_time", (today,)
+            "SELECT * FROM bookings WHERE date = %s ORDER BY start_time", (today,)
         )
 
     def get_all_history(self) -> List[Dict]:
@@ -100,29 +98,29 @@ class BookingRepository:
     def get_upcoming(self, employee_id: str) -> List[Dict]:
         today = datetime.now().strftime("%Y-%m-%d")
         return self.repository.fetch_all(
-            "SELECT * FROM bookings WHERE employee_id = ? AND date >= ? ORDER BY date, start_time",
+            "SELECT * FROM bookings WHERE employee_id = %s AND date >= %s ORDER BY date, start_time",
             (employee_id, today),
         )
 
     def get_past_by_employee(self, employee_id: str) -> List[Dict]:
         today = datetime.now().strftime("%Y-%m-%d")
         return self.repository.fetch_all(
-            "SELECT * FROM bookings WHERE employee_id = ? AND date < ? ORDER BY date DESC, start_time",
+            "SELECT * FROM bookings WHERE employee_id = %s AND date < %s ORDER BY date DESC, start_time",
             (employee_id, today),
         )
 
     def get_employee_today(self, employee_id: str) -> List[Dict]:
         today = datetime.now().strftime("%Y-%m-%d")
         return self.repository.fetch_all(
-            "SELECT * FROM bookings WHERE employee_id = ? AND date = ? ORDER BY start_time",
+            "SELECT * FROM bookings WHERE employee_id = %s AND date = %s ORDER BY start_time",
             (employee_id, today),
         )
 
     def get_room_conflicts(self, room_id: str, date: str, start_time: str, end_time: str, exclude_id: str | None = None) -> List[Dict]:
-        query = "SELECT * FROM bookings WHERE room_id = ? AND date = ? AND status NOT IN ('Cancelled','Rejected')"
+        query = "SELECT * FROM bookings WHERE room_id = %s AND date = %s AND status NOT IN ('Cancelled','Rejected')"
         params = [room_id, date]
         if exclude_id:
-            query += " AND id != ?"
+            query += " AND id != %s"
             params.append(exclude_id)
         query += " ORDER BY start_time"
         bookings = self.repository.fetch_all(query, tuple(params))

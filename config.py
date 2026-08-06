@@ -6,6 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
+    DATABASE_URL = os.getenv("DATABASE_URL", "")
     DATA_DIR = BASE_DIR / "data"
     BOOKINGS_PATH = DATA_DIR / "bookings.json"
     BOOKING_DB_PATH = DATA_DIR / "booking.db"

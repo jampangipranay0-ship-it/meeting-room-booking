@@ -220,12 +220,13 @@ document.addEventListener('DOMContentLoaded', function () {
   if (welcomeAnimation) {
     if (window.lottie) {
       try {
+        const animationPath = (window.STATIC_URL || '/static/') + 'animations/robot-hi.json';
         window.lottie.loadAnimation({
           container: welcomeAnimation,
           renderer: 'svg',
           loop: true,
           autoplay: true,
-          path: '/static/animations/robot-hi.json',
+          path: animationPath,
         });
       } catch (error) {
         console.error('Welcome Lottie loadAnimation failed', error);
@@ -261,12 +262,13 @@ document.addEventListener('DOMContentLoaded', function () {
   if (heroAnimation) {
     if (window.lottie) {
       try {
+        const heroAnimationPath = (window.STATIC_URL || '/static/') + 'animations/4Y28M37eMK.json';
         window.lottie.loadAnimation({
           container: heroAnimation,
           renderer: 'svg',
           loop: true,
           autoplay: true,
-          path: '/static/animations/4Y28M37eMK.json',
+          path: heroAnimationPath,
           rendererSettings: {
             preserveAspectRatio: 'xMidYMid meet',
           },

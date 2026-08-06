@@ -3,15 +3,24 @@ from typing import Dict, List, Optional
 
 from models.booking import Booking
 from repositories.booking_repository import BookingRepository
+from repositories.postgres_repository import PostgresRepository
 from repositories.room_repository import RoomRepository
-from repositories.sqlite_repository import SQLiteRepository
 from repositories.json_repository import JsonRepository
 from config import Config
 
 
+class DatabaseConfigError(Exception):
+    pass
+
+
 class BookingService:
     def __init__(self):
-        self.booking_repo = BookingRepository(SQLiteRepository(Config.BOOKING_DB_PATH))
+        database_url = Config.DATABASE_URL
+        if not database_url:
+            raise DatabaseConfigError(
+                "DATABASE_URL is not configured. Set the DATABASE_URL environment variable to connect to Neon/PostgreSQL."
+            )
+        self.booking_repo = BookingRepository(PostgresRepository(database_url))
         self.room_repo = RoomRepository(JsonRepository(Config.ROOMS_PATH))
 
     def create_booking(self, data: Dict) -> Dict:
