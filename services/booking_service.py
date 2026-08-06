@@ -5,6 +5,7 @@ from models.booking import Booking
 from repositories.booking_repository import BookingRepository
 from repositories.postgres_repository import PostgresRepository
 from repositories.room_repository import RoomRepository
+from repositories.sqlite_repository import SQLiteRepository
 from repositories.json_repository import JsonRepository
 from config import Config
 
@@ -16,11 +17,14 @@ class DatabaseConfigError(Exception):
 class BookingService:
     def __init__(self):
         database_url = Config.DATABASE_URL
-        if not database_url:
-            raise DatabaseConfigError(
-                "DATABASE_URL is not configured. Set the DATABASE_URL environment variable to connect to Neon/PostgreSQL."
-            )
-        self.booking_repo = BookingRepository(PostgresRepository(database_url))
+        print("DATABASE_URL exists:", bool(database_url))
+        if database_url:
+            print("DATABASE_URL length:", len(database_url))
+            print("DATABASE_URL prefix:", database_url[:15])
+            self.booking_repo = BookingRepository(PostgresRepository(database_url))
+        else:
+            print("DATABASE_URL missing; using local SQLite booking storage")
+            self.booking_repo = BookingRepository(SQLiteRepository(Config.BOOKING_DB_PATH))
         self.room_repo = RoomRepository(JsonRepository(Config.ROOMS_PATH))
 
     def create_booking(self, data: Dict) -> Dict:
