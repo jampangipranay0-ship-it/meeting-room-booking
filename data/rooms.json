@@ -1,8 +1,74 @@
 [
-  {"id": "room-1", "name": "War Room - BSV", "location": "BSV", "capacity": 12, "equipment": "Video Conferencing", "is_active": true},
-  {"id": "room-2", "name": "Warriors - BSV", "location": "BSV", "capacity": 8, "equipment": "Whiteboard", "is_active": true},
-  {"id": "room-3", "name": "Powerpit - BSV", "location": "BSV", "capacity": 10, "equipment": "Screen", "is_active": true},
-  {"id": "room-4", "name": "Situation - BTM", "location": "BTM", "capacity": 6, "equipment": "Phone", "is_active": true},
-  {"id": "room-5", "name": "Armory - BTM", "location": "BTM", "capacity": 14, "equipment": "Projector", "is_active": true},
-  {"id": "room-6", "name": "Boss - BTM", "location": "BTM", "capacity": 4, "equipment": "TV", "is_active": true}
+  {
+    "id": "room-1",
+    "name": "PINNACLE",
+    "location": "BTM First Floor",
+    "capacity": "6 to 8",
+    "room_type": "Conference Cabin",
+    "equipment": "TV/Monitor, Group Video Conference",
+    "is_active": true
+  },
+  {
+    "id": "room-2",
+    "name": "HORIZON",
+    "location": "BTM First Floor",
+    "capacity": "6 to 8",
+    "room_type": "Conference Cabin",
+    "equipment": "None",
+    "is_active": true
+  },
+  {
+    "id": "room-3",
+    "name": "VERTEX",
+    "location": "BTM First Floor",
+    "capacity": "2 to 3",
+    "room_type": "Discussion Cabin",
+    "equipment": "None",
+    "is_active": true
+  },
+  {
+    "id": "room-4",
+    "name": "FORGE",
+    "location": "BTM Third Floor",
+    "capacity": "6 to 8",
+    "room_type": "Conference Cabin",
+    "equipment": "TV/Monitor, Group Video Conference",
+    "is_active": true
+  },
+  {
+    "id": "room-5",
+    "name": "NEXUS",
+    "location": "BSV Old Office Floor",
+    "capacity": "8 to 10",
+    "room_type": "Conference Cabin",
+    "equipment": "TV/Monitor, Group Video Conference",
+    "is_active": true
+  },
+  {
+    "id": "room-6",
+    "name": "SUMMIT",
+    "location": "BSV New Office Floor",
+    "capacity": "6 to 8",
+    "room_type": "Conference Cabin",
+    "equipment": "None",
+    "is_active": true
+  },
+  {
+    "id": "room-7",
+    "name": "VENTURE",
+    "location": "BSV New Office Floor",
+    "capacity": "3 to 4",
+    "room_type": "Discussion Cabin",
+    "equipment": "None",
+    "is_active": true
+  },
+  {
+    "id": "room-8",
+    "name": "ORIGIN",
+    "location": "BTM First Floor",
+    "capacity": "1 to 3",
+    "room_type": "Executive Cabin",
+    "equipment": "None",
+    "is_active": true
+  }
 ]

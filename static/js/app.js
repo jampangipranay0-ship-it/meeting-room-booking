@@ -83,26 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const updateDropdowns = (blocked) => {
     populateSelect(startTimeSelect, START_SLOTS, blocked);
     populateSelect(endTimeSelect, END_SLOTS, blocked);
-    console.log('updateDropdowns', { blockedCount: blocked.size, startValue: startTimeSelect ? startTimeSelect.value : null, endValue: endTimeSelect ? endTimeSelect.value : null });
   };
-
-  // helper exposed for debugging in browser console
-  try {
-    window.logChoicesState = function () {
-      const startSel = document.getElementById('start_time');
-      const endSel = document.getElementById('end_time');
-      const startOptions = startSel ? startSel.outerHTML : null;
-      const endOptions = endSel ? endSel.outerHTML : null;
-      console.log('logChoicesState', {
-        startDisabled: !!(startSel && startSel.disabled),
-        endDisabled: !!(endSel && endSel.disabled),
-        startValue: startSel ? startSel.value : null,
-        endValue: endSel ? endSel.value : null,
-        startOuter: startOptions ? startOptions.slice(0, 2000) : null,
-        endOuter: endOptions ? endOptions.slice(0, 2000) : null,
-      });
-    };
-  } catch (e) { /* ignore */ }
 
   const updateClientLabel = (purposeValue) => {
     if (!clientNameLabel) return;
@@ -145,6 +126,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const welcomeAnimation = document.getElementById('robotAnimation');
   const heroAnimation = document.getElementById('heroAnimation');
   const isRootPage = window.location.pathname === '/' || window.location.pathname === '';
+  const skipWelcomeAttr = welcomeScreen?.dataset.skipWelcome === 'true';
+  const hasSeenWelcome = sessionStorage.getItem('welcomeSeen') === 'true';
 
   const fetchBookedSlots = async () => {
     if (!bookingDate || !room_id || !bookedSlotsList) return;
@@ -182,10 +165,21 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   if (bookingDate) {
-    const today = new Date().toISOString().split('T')[0];
-    bookingDate.setAttribute('min', today);
-    bookingDate.value = today;
-    bookingDate.addEventListener('change', fetchBookedSlots);
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0];
+    const maxDate = new Date(today);
+    maxDate.setDate(maxDate.getDate() + 7);
+    const maxDateString = maxDate.toISOString().split('T')[0];
+
+    bookingDate.setAttribute('min', todayString);
+    bookingDate.setAttribute('max', maxDateString);
+    bookingDate.value = todayString;
+    bookingDate.addEventListener('change', () => {
+      if (bookingDate.value < todayString || bookingDate.value > maxDateString) {
+        bookingDate.value = todayString;
+      }
+      fetchBookedSlots();
+    });
   }
 
   if (room_id) {
@@ -210,6 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (appShell) {
       appShell.classList.remove('blurred');
     }
+    sessionStorage.setItem('welcomeSeen', 'true');
   };
 
   const showWelcome = () => {
@@ -223,7 +218,6 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   if (welcomeAnimation) {
-    console.log('Welcome Lottie container found', welcomeAnimation);
     if (window.lottie) {
       try {
         window.lottie.loadAnimation({
@@ -241,7 +235,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  if (isRootPage) {
+  if (skipWelcomeAttr || hasSeenWelcome) {
+    showApp();
+  } else if (isRootPage) {
     showWelcome();
   } else {
     showApp();
@@ -263,8 +259,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   if (heroAnimation) {
-    console.log('Hero Lottie container found', heroAnimation);
-    console.log('Lottie library present', !!window.lottie);
     if (window.lottie) {
       try {
         window.lottie.loadAnimation({

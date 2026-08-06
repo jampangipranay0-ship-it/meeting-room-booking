@@ -1,10 +1,14 @@
 from flask import Blueprint, redirect, render_template, request, session, url_for, flash, Response
 
+from repositories.json_repository import JsonRepository
+from repositories.room_repository import RoomRepository
+from config import Config
 from services.booking_service import BookingService
 from services.auth_service import AuthService
 from services.report_service import ReportService
 
 admin_bp = Blueprint("admin", __name__)
+room_repo = RoomRepository(JsonRepository(Config.ROOMS_PATH))
 booking_service = BookingService()
 auth_service = AuthService()
 report_service = ReportService()

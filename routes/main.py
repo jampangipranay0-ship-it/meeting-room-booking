@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from flask import Blueprint, redirect, render_template, request, url_for, flash, jsonify
 
 from services.booking_service import BookingService
@@ -21,6 +22,10 @@ def home():
 
 @main_bp.route("/book", methods=["GET", "POST"])
 def book():
+    today = datetime.now().date()
+    min_date = today.strftime("%Y-%m-%d")
+    max_date = (today + timedelta(days=7)).strftime("%Y-%m-%d")
+
     if request.method == "POST":
         form_data = request.form.to_dict()
         try:
@@ -30,7 +35,7 @@ def book():
         except ValueError as exc:
             flash(str(exc), "danger")
     rooms = room_repo.get_all()
-    return render_template("book.html", rooms=rooms)
+    return render_template("book.html", rooms=rooms, min_date=min_date, max_date=max_date)
 
 
 @main_bp.route("/goodbye")

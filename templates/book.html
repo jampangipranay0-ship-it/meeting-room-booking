@@ -17,7 +17,7 @@
             </div>
             <div class="col-md-6">
               <label class="form-label">Date</label>
-              <input class="form-control" type="date" name="date" id="booking_date" required>
+              <input class="form-control" type="date" name="date" id="booking_date" required min="{{ min_date }}" max="{{ max_date }}">
             </div>
             <div class="col-md-6">
               <label class="form-label">Start Time</label>

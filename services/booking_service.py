@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
 from models.booking import Booking
@@ -15,6 +15,7 @@ class BookingService:
         self.room_repo = RoomRepository(JsonRepository(Config.ROOMS_PATH))
 
     def create_booking(self, data: Dict) -> Dict:
+        self._validate_booking_date(data["date"])
         duration = self._duration_hours(data["start_time"], data["end_time"])
         if duration > 2 and data.get("purpose") != "Online Meeting":
             data["status"] = "Pending Approval"
@@ -26,11 +27,15 @@ class BookingService:
         if self.booking_repo.get_room_conflicts(data["room_id"], data["date"], data["start_time"], data["end_time"]):
             raise ValueError("Room is not available for the selected time")
 
+        room = self.room_repo.get_by_id(data["room_id"])
+        office_location = room.get("location", "") if room else ""
+
         booking_id = self._generate_id()
         booking = {
             "id": booking_id,
             "room_id": data["room_id"],
             "room_name": self._room_name(data["room_id"]),
+            "office": office_location,
             "date": data["date"],
             "start_time": data["start_time"],
             "end_time": data["end_time"],
@@ -129,7 +134,10 @@ class BookingService:
     def _duration_hours(start_time: str, end_time: str) -> float:
         start = BookingService._to_minutes(start_time)
         end = BookingService._to_minutes(end_time)
-        return round((end - start) / 60, 2)
+        duration = round((end - start) / 60, 2)
+        if duration <= 0:
+            raise ValueError("End time must be later than start time.")
+        return duration
 
     @staticmethod
     def _to_minutes(value: str) -> int:
@@ -139,6 +147,17 @@ class BookingService:
     def _room_name(self, room_id: str) -> str:
         room = self.room_repo.get_by_id(room_id)
         return room.get("name", "") if room else ""
+
+    def _validate_booking_date(self, date_str: str) -> None:
+        try:
+            requested_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            raise ValueError("Bookings can only be made up to 7 days in advance.")
+
+        today = datetime.now().date()
+        max_date = today + timedelta(days=7)
+        if requested_date < today or requested_date > max_date:
+            raise ValueError("Bookings can only be made up to 7 days in advance.")
 
     @staticmethod
     def _generate_id() -> str:

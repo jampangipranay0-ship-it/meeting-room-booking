@@ -6,6 +6,7 @@ class Room:
     id: str
     name: str
     location: str
-    capacity: int
+    capacity: str
+    room_type: str = ""
     equipment: str = ""
     is_active: bool = True

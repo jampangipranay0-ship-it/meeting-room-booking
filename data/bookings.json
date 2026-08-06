@@ -1,8 +1,8 @@
-[
+﻿[
   {
     "id": "BK20260731100000",
-    "room_id": "room-1",
-    "room_name": "War Room - BSV",
+    "room_id": "room-5",
+    "room_name": "NEXUS",
     "date": "2026-07-31",
     "start_time": "09:00",
     "end_time": "10:00",
@@ -24,7 +24,7 @@
   {
     "id": "BK20260731151810",
     "room_id": "room-1",
-    "room_name": "War Room - BSV",
+    "room_name": "Pinnacle",
     "date": "2026-07-31",
     "start_time": "14:00",
     "end_time": "14:30",
@@ -46,7 +46,7 @@
   {
     "id": "BK20260731155738",
     "room_id": "room-1",
-    "room_name": "War Room - BSV",
+    "room_name": "Pinnacle",
     "date": "2026-07-31",
     "start_time": "15:00",
     "end_time": "15:30",
@@ -68,7 +68,7 @@
   {
     "id": "BK20260803134842",
     "room_id": "room-1",
-    "room_name": "War Room - BSV",
+    "room_name": "Pinnacle",
     "date": "2026-08-05",
     "start_time": "09:00",
     "end_time": "09:30",
@@ -90,7 +90,7 @@
   {
     "id": "BK20260803135707",
     "room_id": "room-1",
-    "room_name": "War Room - BSV",
+    "room_name": "Pinnacle",
     "date": "2026-08-03",
     "start_time": "09:00",
     "end_time": "09:30",
@@ -112,7 +112,7 @@
   {
     "id": "BK20260803135945",
     "room_id": "room-1",
-    "room_name": "War Room - BSV",
+    "room_name": "Pinnacle",
     "date": "2026-08-03",
     "start_time": "10:00",
     "end_time": "10:30",

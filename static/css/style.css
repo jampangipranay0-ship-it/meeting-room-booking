@@ -234,10 +234,91 @@ body {
   }
 }
 
+.room-card {
+  background: #ffffff;
+  border: 4px solid #0f172a;
+  border-radius: 30px;
+  box-shadow: 0 24px 40px rgba(16, 48, 75, 0.11);
+  overflow: hidden;
+  min-height: 260px;
+}
+
+.room-card .card-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.2rem 1.2rem 1rem;
+}
+
+.room-card-title {
+  font-size: clamp(1.5rem, 1.7vw, 1.8rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.room-card-subtitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 0.7rem;
+}
+
+.room-card-meta {
+  font-size: 0.85rem;
+  color: #475569;
+  line-height: 1.4;
+  margin-bottom: 0.6rem;
+}
+
+.room-card-button {
+  min-width: 100%;
+  padding: 0.7rem 1rem;
+  border-radius: 24px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.room-card-content {
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 1200px) {
+  .room-card {
+    min-height: 240px;
+  }
+
+  .room-card .card-body {
+    padding: 1rem 1rem 0.9rem;
+  }
+
+  .room-card-title {
+    font-size: 1.7rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .room-card-subtitle {
+    font-size: 0.88rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .room-card-meta {
+    font-size: 0.83rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .room-card-button {
+    padding: 0.65rem 0.95rem;
+  }
+}
+
 .hero {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 
 .hero h1,
 .hero p,
@@ -411,30 +492,3 @@ body {
   letter-spacing: 0.15em;
 }
 
-.choices__list--dropdown .choices__item--choice.booked-option,
-.choices__list--dropdown .choices__item--choice.booked-option.is-highlighted,
-.choices__list--dropdown .choices__item--choice.booked-option.is-disabled {
-  color: #b02a37 !important;
-  background: rgba(220, 53, 69, 0.14) !important;
-  font-weight: 700;
-  border-left: 4px solid #d63335;
-  box-shadow: inset 0 0 0 1px rgba(220, 53, 69, 0.15);
-}
-
-.choices__list--dropdown .choices__item--choice {
-  pointer-events: auto;
-}
-
-.choices__list--dropdown .choices__item--choice.booked-option.is-disabled {
-  pointer-events: none;
-  cursor: not-allowed;
-  opacity: 0.85;
-}
-
-.choices__list--dropdown {
-  z-index: 1200;
-}
-
-.choices__list--dropdown .choices__item--choice.booked-option span {
-  color: #b02a37 !important;
-}

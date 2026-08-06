@@ -19,17 +19,20 @@
     <h3 class="fw-bold">Available Rooms</h3>
     <span class="badge bg-success">Dynamic rooms</span>
   </div>
-  <div class="row g-4">
+  <div class="row g-2">
     {% for room in rooms %}
-    <div class="col-md-4">
-      <div class="card shadow-sm rounded-4 h-100">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center">
-            <h5 class="fw-bold">{{ room.name }}</h5>
-            <span class="badge bg-primary">{{ room.location }}</span>
+    <div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="room-card h-100">
+        <div class="card-body d-flex flex-column">
+          <div class="room-card-content text-center">
+            <h2 class="room-card-title mb-3">{{ room.name }}</h2>
+            <p class="room-card-subtitle mb-4">{{ room.room_type }}</p>
+            <p class="room-card-meta mb-2"><strong>Amenities :</strong> {{ room.equipment }}</p>
+            <p class="room-card-meta mb-0"><strong>Capacity :</strong> {{ room.capacity }} People</p>
           </div>
-          <p class="text-muted mb-3">Capacity: {{ room.capacity }} · {{ room.equipment }}</p>
-          <a class="btn btn-outline-primary btn-sm" href="{{ url_for('main.book') }}">View Slots</a>
+          <div class="mt-auto text-center">
+            <a class="btn btn-primary btn-lg room-card-button" href="{{ url_for('main.book') }}">View &amp; Book Slots</a>
+          </div>
         </div>
       </div>
     </div>
