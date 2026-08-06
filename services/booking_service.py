@@ -1,12 +1,12 @@
-from datetime import datetime, timedelta
+import os
 import traceback
+from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
 from models.booking import Booking
 from repositories.booking_repository import BookingRepository
 from repositories.postgres_repository import PostgresRepository
 from repositories.room_repository import RoomRepository
-from repositories.sqlite_repository import SQLiteRepository
 from repositories.json_repository import JsonRepository
 from config import Config
 
@@ -17,19 +17,23 @@ class DatabaseConfigError(Exception):
 
 class BookingService:
     def __init__(self):
-        database_url = Config.DATABASE_URL
+        database_url = os.getenv("DATABASE_URL", "").strip()
         print("DATABASE_URL exists:", bool(database_url))
         if database_url:
             print("DATABASE_URL length:", len(database_url))
             print("DATABASE_URL prefix:", database_url[:15])
             try:
                 self.booking_repo = BookingRepository(PostgresRepository(database_url))
+                print("Using PostgreSQL booking storage")
             except Exception:
-                print("PostgreSQL init failed; falling back to local SQLite storage")
+                print("PostgreSQL init failed and DATABASE_URL is configured; booking persistence must use PostgreSQL")
                 traceback.print_exc()
-                self.booking_repo = BookingRepository(SQLiteRepository(Config.BOOKING_DB_PATH))
+                raise
         else:
+            if os.getenv("VERCEL"):
+                raise EnvironmentError("DATABASE_URL must be configured on Vercel for PostgreSQL booking persistence")
             print("DATABASE_URL missing; using local SQLite booking storage")
+            from repositories.sqlite_repository import SQLiteRepository
             self.booking_repo = BookingRepository(SQLiteRepository(Config.BOOKING_DB_PATH))
         self.room_repo = RoomRepository(JsonRepository(Config.ROOMS_PATH))
 
