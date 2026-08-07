@@ -14,7 +14,6 @@ class SQLiteRepository(BaseRepository):
 
     def execute(self, query: str, parameters: tuple = (), commit: bool = False):
         cursor = self.connection.cursor()
-        query = query.replace("%s", "?")
         cursor.execute(query, parameters)
         if commit:
             self.connection.commit()

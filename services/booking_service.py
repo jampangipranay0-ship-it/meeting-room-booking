@@ -1,12 +1,12 @@
-import os
-import traceback
 from datetime import datetime, timedelta
+import os
 from typing import Dict, List, Optional
 
 from models.booking import Booking
 from repositories.booking_repository import BookingRepository
-from repositories.postgres_repository import PostgresRepository
+from repositories.google_sheets_repository import GoogleSheetsRepository
 from repositories.room_repository import RoomRepository
+from repositories.sqlite_repository import SQLiteRepository
 from repositories.json_repository import JsonRepository
 from config import Config
 
@@ -17,23 +17,15 @@ class DatabaseConfigError(Exception):
 
 class BookingService:
     def __init__(self):
-        database_url = os.getenv("DATABASE_URL", "").strip()
-        print("DATABASE_URL exists:", bool(database_url))
-        if database_url:
-            print("DATABASE_URL length:", len(database_url))
-            print("DATABASE_URL prefix:", database_url[:15])
-            try:
-                self.booking_repo = BookingRepository(PostgresRepository(database_url))
-                print("Using PostgreSQL booking storage")
-            except Exception:
-                print("PostgreSQL init failed and DATABASE_URL is configured; booking persistence must use PostgreSQL")
-                traceback.print_exc()
-                raise
+        # Prefer Google Sheets when configured (production on Vercel).
+        google_url = os.getenv("GOOGLE_SHEETS_URL", "").strip()
+        google_key = os.getenv("GOOGLE_SHEETS_API_KEY", "").strip()
+        if google_url:
+            print("Using Google Sheets booking storage", google_url[:40])
+            self.booking_repo = BookingRepository(GoogleSheetsRepository(google_url, google_key))
         else:
-            if os.getenv("VERCEL"):
-                raise EnvironmentError("DATABASE_URL must be configured on Vercel for PostgreSQL booking persistence")
-            print("DATABASE_URL missing; using local SQLite booking storage")
-            from repositories.sqlite_repository import SQLiteRepository
+            # Local fallback: SQLite
+            print("GOOGLE_SHEETS_URL missing; using local SQLite booking storage")
             self.booking_repo = BookingRepository(SQLiteRepository(Config.BOOKING_DB_PATH))
         self.room_repo = RoomRepository(JsonRepository(Config.ROOMS_PATH))
 
