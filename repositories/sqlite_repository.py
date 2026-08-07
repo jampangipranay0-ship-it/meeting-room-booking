@@ -14,7 +14,10 @@ class SQLiteRepository(BaseRepository):
 
     def execute(self, query: str, parameters: tuple = (), commit: bool = False):
         cursor = self.connection.cursor()
-        cursor.execute(query, parameters)
+        # Convert psycopg/psycopg2-style %s placeholders to SQLite '?' placeholders
+        # so the same SQL in BookingRepository works for both backends.
+        sqlite_query = query.replace("%s", "?")
+        cursor.execute(sqlite_query, parameters)
         if commit:
             self.connection.commit()
         return cursor

@@ -26,7 +26,7 @@ class BookingService:
             self.booking_repo = BookingRepository(GoogleSheetsRepository(google_url, google_key))
         else:
             # Local fallback: SQLite
-            print("GOOGLE_SHEETS_URL missing; using local SQLite booking storage")
+            print("GOOGLE_SHEETS_API_URL missing; using local SQLite booking storage")
             self.booking_repo = BookingRepository(SQLiteRepository(Config.BOOKING_DB_PATH))
         self.room_repo = RoomRepository(JsonRepository(Config.ROOMS_PATH))
 
