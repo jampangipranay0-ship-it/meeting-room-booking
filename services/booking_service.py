@@ -18,10 +18,11 @@ class DatabaseConfigError(Exception):
 class BookingService:
     def __init__(self):
         # Prefer Google Sheets when configured (production on Vercel).
-        google_url = os.getenv("GOOGLE_SHEETS_URL", "").strip()
+        google_url = os.getenv("GOOGLE_SHEETS_API_URL", "").strip()
+        # No API key required by default; keep ability to supply one if needed
         google_key = os.getenv("GOOGLE_SHEETS_API_KEY", "").strip()
         if google_url:
-            print("Using Google Sheets booking storage", google_url[:40])
+            print("Using Google Sheets booking storage", google_url[:80])
             self.booking_repo = BookingRepository(GoogleSheetsRepository(google_url, google_key))
         else:
             # Local fallback: SQLite
